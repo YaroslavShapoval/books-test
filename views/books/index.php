@@ -58,7 +58,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         $options = array_merge([
                             'title' => Yii::t('yii', 'View'),
                             'aria-label' => Yii::t('yii', 'View'),
-                            'data-pjax' => '1',
+                            'data-pjax' => '0',
+                            'class' => 'modal-view-button',
                         ]);
                         return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, $options);
                     },
@@ -67,3 +68,8 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 </div>
+
+<?php
+yii\bootstrap\Modal::begin(['id' =>'modal-ajax-view']);
+yii\bootstrap\Modal::end();
+?>
