@@ -29,7 +29,20 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => '#',
             ],
 
-            'preview',
+            [
+                'attribute' => 'preview',
+                'format' => 'raw',
+                'value' => function(\app\models\Book $order) {
+                    return \dosamigos\gallery\Gallery::widget([
+                        'items' => [
+                            'url' => $order->previewUrl,
+                        ],
+                        'options' => [
+                            'class' => 'gallery-parent',
+                        ],
+                    ]);
+                },
+            ],
 
             'name',
 
@@ -52,9 +65,10 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 
             [
+                # See \yii\grid\ActionColumn::initDefaultButtons
                 'class' => yii\grid\ActionColumn::className(),
                 'buttons' => [
-                    'view' => function ($url, $model, $key) {
+                    'view' => function ($url) {
                         $options = array_merge([
                             'title' => Yii::t('yii', 'View'),
                             'aria-label' => Yii::t('yii', 'View'),

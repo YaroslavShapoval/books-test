@@ -12,12 +12,21 @@ use yii\widgets\ActiveForm;
 ?>
 
 <div class="book-form">
-
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+        'options' => [
+            'enctype' => 'multipart/form-data',
+        ],
+    ]); ?>
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'preview')->textInput(['maxlength' => true]) ?>
+    <?php if ($model->previewUrl !== null): ?>
+        <?= Html::img($model->previewUrl, [
+            'style' => 'max-width: 200px; max-height: 200px;',
+        ]) ?>
+    <?php endif ?>
+
+    <?= $form->field($model, 'previewFile')->fileInput() ?>
 
     <?= $form->field($model, 'author_id')->dropDownList(ArrayHelper::map(\app\models\Author::find()->all(), 'id', 'fullName'), [
         'prompt' => 'Автор',

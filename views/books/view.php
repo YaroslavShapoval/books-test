@@ -8,7 +8,7 @@ use yii\widgets\DetailView;
  * @var $model app\models\Book
  */
 
-$this->title = $model->name;
+$this->title = '#' . $model->primaryKey . ': ' . $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Книги', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -30,13 +30,27 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
             'name',
-            'author_id',
-            'date',
-            'preview',
-            'date_create',
-            'date_update',
+
+            [
+                'attribute' => 'author_id',
+                'value' => $model->author->fullName,
+            ],
+
+            'date:date',
+
+            [
+                'attribute' => 'preview',
+                'format' => 'raw',
+                'value' => \dosamigos\gallery\Gallery::widget([
+                    'items' => [
+                        'url' => $model->previewUrl,
+                    ],
+                    'options' => [
+                        'class' => 'gallery-parent',
+                    ],
+                ]),
+            ],
         ],
     ]) ?>
 

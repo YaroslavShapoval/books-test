@@ -5,6 +5,7 @@ namespace app\models;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\helpers\StringHelper;
 
 /**
  * This is the model class for table "{{%books}}".
@@ -17,10 +18,16 @@ use yii\db\ActiveRecord;
  * @property integer $date_create
  * @property integer $date_update
  *
+ * @property string $previewUrl
  * @property Author $author
  */
 class Book extends ActiveRecord
 {
+    /**
+     * @var \yii\web\UploadedFile
+     */
+    public $previewFile = null;
+
     /**
      * @inheritdoc
      */
@@ -54,7 +61,26 @@ class Book extends ActiveRecord
             [['date'], 'date', 'format' => 'yyyy-mm-dd'],
             [['name', 'preview'], 'string', 'max' => 255],
             [['author_id'], 'exist', 'skipOnError' => true, 'targetClass' => Author::className(), 'targetAttribute' => ['author_id' => 'id']],
+            [['previewFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg, jpeg'],
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function beforeSave($insert)
+    {
+        if (!$this->validate()) {
+            return false;
+        }
+
+        if (!empty($this->previewFile)) {
+            $fileName = StringHelper::truncate($this->previewFile->baseName, 100) . '_' . time() . '.' . $this->previewFile->extension;
+            $this->previewFile->saveAs(Yii::$app->params['uploadFolder'] . $fileName);
+            $this->preview = $fileName;
+        }
+
+        return parent::beforeSave($insert);
     }
 
     /**
@@ -68,9 +94,22 @@ class Book extends ActiveRecord
             'author_id' => 'Автор',
             'date' => 'Дата выхода книги',
             'preview' => 'Превью',
+            'previewFile' => 'Превью',
             'date_create' => 'Date Create',
             'date_update' => 'Date Update',
         ];
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getPreviewUrl()
+    {
+        if (!empty($this->preview)) {
+            return Yii::$app->params['uploadUrl'] . $this->preview;
+        }
+
+        return null;
     }
 
     /**

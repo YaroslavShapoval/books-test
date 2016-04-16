@@ -9,6 +9,7 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * BooksController implements the CRUD actions for Book model.
@@ -120,14 +121,18 @@ class BooksController extends Controller
             Yii::$app->session->set('afterSaveBookUrl', Yii::$app->request->referrer);
         }
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            if (empty($returnUrl)) {
-                $returnUrl = ['index'];
+        if ($model->load(Yii::$app->request->post())) {
+            $model->previewFile = UploadedFile::getInstance($model, 'previewFile');
+
+            if ($model->save()) {
+                if (empty($returnUrl)) {
+                    $returnUrl = ['index'];
+                }
+
+                Yii::$app->session->remove('afterSaveBookUrl');
+
+                return $this->redirect($returnUrl);
             }
-
-            Yii::$app->session->remove('afterSaveBookUrl');
-
-            return $this->redirect($returnUrl);
         } else {
             return $this->render('update', [
                 'model' => $model,
