@@ -35,9 +35,11 @@ class Book extends ActiveRecord
     public function behaviors()
     {
         return [
-            TimestampBehavior::className(),
-            'createdAtAttribute' => 'date_create',
-            'updatedAtAttribute' => 'date_update',
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'date_create',
+                'updatedAtAttribute' => 'date_update',
+            ],
         ];
     }
 
@@ -47,9 +49,9 @@ class Book extends ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'author_id', 'date', 'date_create', 'date_update'], 'required'],
+            [['name', 'author_id', 'date'], 'required'],
             [['author_id', 'date_create', 'date_update'], 'integer'],
-            [['date'], 'safe'],
+            [['date'], 'date', 'format' => 'yyyy-mm-dd'],
             [['name', 'preview'], 'string', 'max' => 255],
             [['author_id'], 'exist', 'skipOnError' => true, 'targetClass' => Author::className(), 'targetAttribute' => ['author_id' => 'id']],
         ];
@@ -61,11 +63,11 @@ class Book extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'name' => 'Name',
-            'author_id' => 'Author ID',
-            'date' => 'Date',
-            'preview' => 'Preview',
+            'id' => 'ID книги',
+            'name' => 'Название',
+            'author_id' => 'Автор',
+            'date' => 'Дата выхода книги',
+            'preview' => 'Превью',
             'date_create' => 'Date Create',
             'date_update' => 'Date Update',
         ];

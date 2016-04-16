@@ -11,15 +11,17 @@ class m160416_115815_create_books extends Migration
      */
     public function up()
     {
+        $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
+
         $this->createTable($this->tableName, [
             'id' => $this->primaryKey(),
             'name' => $this->string()->notNull(),
             'author_id' => $this->integer()->notNull(),
-            'date' => $this->datetime()->notNull(),
+            'date' => $this->date()->notNull(),
             'preview' => $this->string(),
             'date_create' => $this->integer()->notNull(),
             'date_update' => $this->integer()->notNull(),
-        ]);
+        ], $tableOptions);
 
         $this->addForeignKey(
             'fk_book_author_id',

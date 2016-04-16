@@ -11,6 +11,8 @@ use yii\db\ActiveRecord;
  * @property integer $id
  * @property string $firstname
  * @property string $lastname
+ *
+ * @property string $fullName
  */
 class Author extends ActiveRecord
 {
@@ -43,5 +45,22 @@ class Author extends ActiveRecord
             'firstname' => 'First name',
             'lastname' => 'Last name',
         ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getFullName()
+    {
+        return $this->firstname . ' ' . $this->lastname;
+    }
+
+    /**
+     * @inheritdoc
+     * @return query\AuthorsQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new query\AuthorsQuery(get_called_class());
     }
 }

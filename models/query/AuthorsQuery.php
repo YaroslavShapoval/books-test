@@ -1,18 +1,19 @@
 <?php
 
 namespace app\models\query;
+use app\models\Author;
 use yii\db\ActiveQuery;
 
 /**
- * This is the ActiveQuery class for [[\app\models\Book]].
+ * This is the ActiveQuery class for [[Author]].
  *
- * @see \app\models\Book
+ * @see Author
  */
-class BooksQuery extends ActiveQuery
+class AuthorsQuery extends ActiveQuery
 {
     /**
      * @inheritdoc
-     * @return \app\models\Book[]|array
+     * @return Author[]|array
      */
     public function all($db = null)
     {
@@ -21,7 +22,7 @@ class BooksQuery extends ActiveQuery
 
     /**
      * @inheritdoc
-     * @return \app\models\Book|array|null
+     * @return Author|array|null
      */
     public function one($db = null)
     {

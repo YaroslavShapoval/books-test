@@ -2,6 +2,7 @@
 
 namespace app\models\search;
 
+use app\models\Author;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -12,14 +13,18 @@ use app\models\Book;
  */
 class BookSearch extends Book
 {
+    public $dateFrom = null;
+    public $dateTo = null;
+
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['id', 'author_id', 'date_create', 'date_update'], 'integer'],
-            [['name', 'date', 'preview'], 'safe'],
+            [['id',], 'integer'],
+            [['dateFrom', 'dateTo', 'name',], 'safe'],
+            [['author_id'], 'exist', 'skipOnError' => true, 'targetClass' => Author::className(), 'targetAttribute' => ['author_id' => 'id']],
         ];
     }
 
@@ -28,8 +33,18 @@ class BookSearch extends Book
      */
     public function scenarios()
     {
-        // bypass scenarios() implementation in the parent class
         return Model::scenarios();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return array_merge(parent::attributeLabels(), [
+            'dateFrom' => 'Начальная дата',
+            'dateTo' => 'Конечная дата',
+        ]);
     }
 
     /**
@@ -43,8 +58,6 @@ class BookSearch extends Book
     {
         $query = Book::find();
 
-        // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -52,22 +65,18 @@ class BookSearch extends Book
         $this->load($params);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
 
-        // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'author_id' => $this->author_id,
             'date' => $this->date,
-            'date_create' => $this->date_create,
-            'date_update' => $this->date_update,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'preview', $this->preview]);
+        $query->andFilterWhere([
+            'between', 'date', $this->dateFrom, $this->dateTo,
+        ])->andFilterWhere(['like', 'name', $this->name]);
 
         return $dataProvider;
     }
