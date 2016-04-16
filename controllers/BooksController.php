@@ -75,8 +75,20 @@ class BooksController extends Controller
     {
         $model = new Book();
 
+        $returnUrl = Yii::$app->session->get('afterSaveBookUrl');
+
+        if (empty($returnUrl)) {
+            Yii::$app->session->set('afterSaveBookUrl', Yii::$app->request->referrer);
+        }
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            if (empty($returnUrl)) {
+                $returnUrl = ['index'];
+            }
+
+            Yii::$app->session->remove('afterSaveBookUrl');
+
+            return $this->redirect($returnUrl);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -94,8 +106,20 @@ class BooksController extends Controller
     {
         $model = $this->findModel($id);
 
+        $returnUrl = Yii::$app->session->get('afterSaveBookUrl');
+
+        if (empty($returnUrl)) {
+            Yii::$app->session->set('afterSaveBookUrl', Yii::$app->request->referrer);
+        }
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            if (empty($returnUrl)) {
+                $returnUrl = ['index'];
+            }
+
+            Yii::$app->session->remove('afterSaveBookUrl');
+
+            return $this->redirect($returnUrl);
         } else {
             return $this->render('update', [
                 'model' => $model,
