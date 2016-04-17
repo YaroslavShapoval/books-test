@@ -2,7 +2,7 @@
 
 return [
     [
-        'username' => 'amanda48',
+        'username' => 'demo',
         'auth_key' => 'z8R7l1xff9Guz1_JfUHXPT9cIgPqOz7h',
         'password_hash' => '$2y$13$mCrLccK/hP05RzwZn2rlAOAaCvzAS/6XrUPnmd6nbiSCEcLjgWVgm',
         'password_reset_token' => 'm3Wc1RqXzubOmPyraNWMV-EckaNQ198S_1460882772',

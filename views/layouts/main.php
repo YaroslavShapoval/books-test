@@ -37,7 +37,7 @@ $siteUser = Yii::$app->user->identity;
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => 'Books',
+        'brandLabel' => 'Книги',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
@@ -47,14 +47,14 @@ $siteUser = Yii::$app->user->identity;
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            ['label' => 'Home', 'url' => ['/']],
+            ['label' => 'Главная', 'url' => ['/']],
             Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['/site/login']]
+                ['label' => 'Войти', 'url' => ['/site/login']]
             ) : (
                 '<li>'
                 . Html::beginForm(['/site/logout'], 'post', ['class' => 'navbar-form'])
                 . Html::submitButton(
-                    'Logout (' . $siteUser->username . ')',
+                    'Выйти (' . $siteUser->username . ')',
                     ['class' => 'btn btn-link']
                 )
                 . Html::endForm()

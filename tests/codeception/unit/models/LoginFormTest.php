@@ -55,7 +55,7 @@ class LoginFormTest extends TestCase
     public function testLoginCorrect()
     {
         $model = new LoginForm([
-            'username' => 'amanda48',
+            'username' => 'demo',
             'password' => 'password_0',
         ]);
 

@@ -10,7 +10,6 @@ modules:
     WebDriver:
       url: http://books.test
       browser: firefox
-      wait: 1
       window_size: maximize
       restart: true
 
@@ -24,7 +23,6 @@ env:
 
       config:
         WebDriver:
-          url: http://books.test/
+          url: http://books.test
           browser: phantomjs
-          wait: 1
           window_size: 1024x768
