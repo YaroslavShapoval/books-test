@@ -1,18 +1,23 @@
-# Server: php -S localhost:8080
+# Server: java -jar /opt/selenium/selenium-server-standalone-2.53.0.jar --webdriver=1408 --webdriver-selenium-grid-hub=http://127.0.0.1:4444
 # Running: codecept build && codecept run
 class_name: AcceptanceTester
 
 modules:
   enabled:
-    - PhpBrowser
+   - WebDriver
+
   config:
-    PhpBrowser:
-      url: http://books.test/
+    WebDriver:
+      url: http://books.test
+      browser: firefox
+      wait: 1
+      window_size: maximize
+      restart: true
 
 env:
   # Server: java -jar /opt/selenium/selenium-server-standalone-2.53.0.jar hub phantomjs --webdriver=1408 --webdriver-selenium-grid-hub=http://127.0.0.1:4444
-  # Running: codecept build && codecept run --env webdriver
-  webdriver:
+  # Running: codecept build && codecept run --env phantomjs
+  phantomjs:
     modules:
       enabled:
         - WebDriver
@@ -23,17 +28,3 @@ env:
           browser: phantomjs
           wait: 1
           window_size: 1024x768
-
-  # Running: codecept build && codecept run --env webdriver-firefox
-  webdriver-firefox:
-    modules:
-      enabled:
-       - WebDriver
-
-      config:
-        WebDriver:
-          url: http://books.test/
-          browser: firefox
-          wait: 1
-          window_size: maximize
-          restart: true

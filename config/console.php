@@ -25,13 +25,6 @@ $config = [
         'db' => $db,
     ],
     'params' => $params,
-    /*
-    'controllerMap' => [
-        'fixture' => [ // Fixture generation command line.
-            'class' => 'yii\faker\FixtureController',
-        ],
-    ],
-    */
 ];
 
 if (YII_ENV_DEV) {
@@ -39,6 +32,13 @@ if (YII_ENV_DEV) {
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
+    ];
+    // Fixture generation command line.
+    $config['controllerMap']['fixture'] = [
+        'class' => 'yii\faker\FixtureController',
+        'fixtureDataPath' => '@tests/codeception/fixtures/data',
+        'templatePath' => '@tests/codeception/templates/fixtures',
+        'namespace' => 'tests\codeception\fixtures',
     ];
 }
 
