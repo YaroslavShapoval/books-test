@@ -3,7 +3,8 @@
  * Application configuration shared by all test types
  */
 return [
-    'language' => 'en-US',
+    'language' => 'ru',
+
     'controllerMap' => [
         'fixture' => [
             'class' => 'yii\faker\FixtureController',
@@ -12,15 +13,17 @@ return [
             'namespace' => 'tests\codeception\fixtures',
         ],
     ],
+
     'components' => [
-        'db' => [
-            'dsn' => 'mysql:host=localhost;dbname=yii2_basic_tests',
-        ],
+        'db' => require 'db.php',
+
         'mailer' => [
             'useFileTransport' => true,
         ],
+
         'urlManager' => [
-            'showScriptName' => true,
+            'showScriptName' => false,
+            'enablePrettyUrl' => true,
         ],
     ],
 ];
