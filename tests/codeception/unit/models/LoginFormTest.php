@@ -2,6 +2,7 @@
 
 namespace tests\codeception\unit\models;
 
+use app\models\User;
 use tests\codeception\fixtures\UserFixture;
 use Yii;
 use yii\codeception\TestCase;
@@ -41,7 +42,7 @@ class LoginFormTest extends TestCase
     public function testLoginWrongPassword()
     {
         $model = new LoginForm([
-            'username' => 'amanda48',
+            'username' => 'demo',
             'password' => 'wrong_password',
         ]);
 
@@ -66,4 +67,46 @@ class LoginFormTest extends TestCase
         });
     }
 
+    public function testLoginAsDeletedUser()
+    {
+        $model = new LoginForm([
+            'username' => 'zmeller',
+            'password' => 'password_1',
+        ]);
+
+        $this->specify('deleted user should not be able to login', function () use ($model) {
+            expect('model should not login user', $model->login())->false();
+            expect('user should not be logged in', Yii::$app->user->isGuest)->true();
+        });
+    }
+
+    public function testLoginAfterChangingPassword()
+    {
+        $user = User::findByUsername('demo');
+
+        $user->setPassword('new_password');
+        expect_that($user->save(true, ['password_hash']));
+
+        $model = new LoginForm([
+            'username' => 'demo',
+            'password' => 'password_0',
+        ]);
+
+        $this->specify('existing user should not be able to login with old password', function () use ($model) {
+            expect('model should not login user', $model->login())->false();
+            expect('error message should be set', $model->errors)->hasKey('password');
+            expect('user should not be logged in', Yii::$app->user->isGuest)->true();
+        });
+
+        $model = new LoginForm([
+            'username' => 'demo',
+            'password' => 'new_password',
+        ]);
+
+        $this->specify('existing user should be able to login with correct new password', function () use ($model) {
+            expect('model should login user', $model->login())->true();
+            expect('error message should not be set', $model->errors)->hasntKey('password');
+            expect('user should be logged in', Yii::$app->user->isGuest)->false();
+        });
+    }
 }

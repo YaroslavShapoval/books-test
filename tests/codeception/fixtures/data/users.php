@@ -11,13 +11,14 @@ return [
         'email' => 'rdibbert@wilderman.info',
     ],
     [
-        'username' => 'zmueller',
+        'username' => 'zmeller',
         'auth_key' => '5texL9E6DUQuXYTCyJAgKV0yTj1H5yVK',
         'password_hash' => '$2y$13$nJxCv6uU7RvD8lkXdNg3GOHN7G.UGGDkEJiUAkv4RRO8YtfLS4Nw6',
         'password_reset_token' => 'xFsJegtWboLM8vgeb-01rhSBBXc8L--N_1460882773',
         'created_at' => 1460882773,
         'updated_at' => 1460882773,
-        'email' => 'zoie10@gmail.com',
+        'email' => 'zoe10@gmail.com',
+        'status' => 0,
     ],
     [
         'username' => 'lroberts',
