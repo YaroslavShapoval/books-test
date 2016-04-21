@@ -83,26 +83,19 @@ class BooksController extends Controller
     public function actionCreate()
     {
         $model = new Book();
+        $returnUrl = $this->checkAfterSaveBookUrl();
 
-        $returnUrl = Yii::$app->session->get('afterSaveBookUrl');
+        if ($model->load(Yii::$app->request->post())) {
+            $model->previewFile = UploadedFile::getInstance($model, 'previewFile');
 
-        if (empty($returnUrl)) {
-            Yii::$app->session->set('afterSaveBookUrl', Yii::$app->request->referrer);
-        }
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            if (empty($returnUrl)) {
-                $returnUrl = ['index'];
+            if ($model->save()) {
+                return $this->redirect($returnUrl);
             }
-
-            Yii::$app->session->remove('afterSaveBookUrl');
-
-            return $this->redirect($returnUrl);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
         }
+
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
 
     /**
@@ -114,30 +107,19 @@ class BooksController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-        $returnUrl = Yii::$app->session->get('afterSaveBookUrl');
-
-        if (empty($returnUrl)) {
-            Yii::$app->session->set('afterSaveBookUrl', Yii::$app->request->referrer);
-        }
+        $returnUrl = $this->checkAfterSaveBookUrl();
 
         if ($model->load(Yii::$app->request->post())) {
             $model->previewFile = UploadedFile::getInstance($model, 'previewFile');
 
             if ($model->save()) {
-                if (empty($returnUrl)) {
-                    $returnUrl = ['index'];
-                }
-
-                Yii::$app->session->remove('afterSaveBookUrl');
-
                 return $this->redirect($returnUrl);
             }
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
         }
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
     }
 
     /**
@@ -160,12 +142,30 @@ class BooksController extends Controller
      * @return Book the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    private function findModel($id)
     {
         if (($model = Book::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    /**
+     * Getting url from session for returning after working with model.
+     * If url is empty, setting it in storage and returning $defaultValue.
+     * @param array $defaultValue
+     * @return array|mixed
+     */
+    private function checkAfterSaveBookUrl($defaultValue = ['index'])
+    {
+        $returnUrl = Yii::$app->session->get('afterSaveBookUrl');
+
+        if (empty($returnUrl)) {
+            Yii::$app->session->set('afterSaveBookUrl', Yii::$app->request->referrer);
+            $returnUrl = $defaultValue;
+        }
+
+        return $returnUrl;
     }
 }
