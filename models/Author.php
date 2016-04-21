@@ -18,6 +18,7 @@ class Author extends ActiveRecord
 {
     /**
      * @inheritdoc
+     * @codeCoverageIgnore
      */
     public static function tableName()
     {
@@ -26,6 +27,7 @@ class Author extends ActiveRecord
 
     /**
      * @inheritdoc
+     * @codeCoverageIgnore
      */
     public function rules()
     {
@@ -37,6 +39,7 @@ class Author extends ActiveRecord
 
     /**
      * @inheritdoc
+     * @codeCoverageIgnore
      */
     public function attributeLabels()
     {

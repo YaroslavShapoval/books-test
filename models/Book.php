@@ -30,6 +30,7 @@ class Book extends ActiveRecord
 
     /**
      * @inheritdoc
+     * @codeCoverageIgnore
      */
     public static function tableName()
     {
@@ -38,6 +39,7 @@ class Book extends ActiveRecord
 
     /**
      * @inheritdoc
+     * @codeCoverageIgnore
      */
     public function behaviors()
     {
@@ -52,6 +54,7 @@ class Book extends ActiveRecord
 
     /**
      * @inheritdoc
+     * @codeCoverageIgnore
      */
     public function rules()
     {
@@ -67,6 +70,7 @@ class Book extends ActiveRecord
 
     /**
      * @inheritdoc
+     * @codeCoverageIgnore
      */
     public function beforeSave($insert)
     {
@@ -74,17 +78,14 @@ class Book extends ActiveRecord
             return false;
         }
 
-        if (!empty($this->previewFile)) {
-            $fileName = StringHelper::truncate($this->previewFile->baseName, 100) . '_' . time() . '.' . $this->previewFile->extension;
-            $this->previewFile->saveAs(Yii::$app->params['uploadFolder'] . $fileName);
-            $this->preview = $fileName;
-        }
+        $this->upload();
 
         return parent::beforeSave($insert);
     }
 
     /**
      * @inheritdoc
+     * @codeCoverageIgnore
      */
     public function attributeLabels()
     {
@@ -98,6 +99,18 @@ class Book extends ActiveRecord
             'date_create' => 'Date Create',
             'date_update' => 'Date Update',
         ];
+    }
+
+    /**
+     * Save uploaded image
+     */
+    private function upload()
+    {
+        if (!empty($this->previewFile)) {
+            $fileName = StringHelper::truncate($this->previewFile->baseName, 100) . '_' . time() . '.' . $this->previewFile->extension;
+            $this->previewFile->saveAs(Yii::$app->params['uploadFolder'] . $fileName);
+            $this->preview = $fileName;
+        }
     }
 
     /**

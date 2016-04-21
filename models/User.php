@@ -29,6 +29,7 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * @inheritdoc
+     * @codeCoverageIgnore
      */
     public static function tableName()
     {
@@ -37,6 +38,7 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * @inheritdoc
+     * @codeCoverageIgnore
      */
     public function behaviors()
     {
@@ -47,6 +49,7 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * @inheritdoc
+     * @codeCoverageIgnore
      */
     public function rules()
     {
@@ -76,7 +79,7 @@ class User extends ActiveRecord implements IdentityInterface
      * Finds user by username
      *
      * @param string $username
-     * @return static|null
+     * @return self|null
      */
     public static function findByUsername($username)
     {

@@ -4,12 +4,12 @@ namespace tests\codeception\unit\models;
 
 use app\models\User;
 use tests\codeception\fixtures\UserFixture;
+use tests\codeception\unit\DbTestCase;
 use Yii;
-use yii\codeception\TestCase;
 use app\models\forms\LoginForm;
 use Codeception\Specify;
 
-class LoginFormTest extends TestCase
+class LoginFormTest extends DbTestCase
 {
     use Specify;
 
@@ -33,7 +33,7 @@ class LoginFormTest extends TestCase
             'password' => 'not_existing_password',
         ]);
 
-        $this->specify('user should not be able to login, when there is no identity', function () use ($model) {
+        $this->specify('user should not be able to login when there is no identity', function () use ($model) {
             expect('model should not login user', $model->login())->false();
             expect('user should not be logged in', Yii::$app->user->isGuest)->true();
         });

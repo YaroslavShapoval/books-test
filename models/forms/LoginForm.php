@@ -19,7 +19,8 @@ class LoginForm extends Model
 
 
     /**
-     * @return array the validation rules.
+     * @inheritdoc
+     * @codeCoverageIgnore
      */
     public function rules()
     {
@@ -36,6 +37,7 @@ class LoginForm extends Model
 
     /**
      * @inheritdoc
+     * @codeCoverageIgnore
      */
     public function attributeLabels()
     {
